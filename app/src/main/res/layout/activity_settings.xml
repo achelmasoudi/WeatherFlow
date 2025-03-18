@@ -61,6 +61,7 @@
                         <ImageView
                             android:layout_width="22dp"
                             android:layout_height="22dp"
+                            android:layout_gravity="center"
                             android:src="@drawable/city_icon" />
 
                         <TextView
@@ -123,6 +124,7 @@
                         <ImageView
                             android:layout_width="22dp"
                             android:layout_height="22dp"
+                            android:layout_gravity="center"
                             android:src="@drawable/temperature_unit_icon" />
 
                         <TextView
@@ -183,8 +185,8 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="22dp"
-                            android:layout_height="22dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center"
                             android:src="@drawable/notifications_icon" />
 
@@ -196,7 +198,7 @@
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:text="Daily Weather Notifications"
-                            android:textColor="?attr/colorOnBackground"
+                            android:textColor="@color/white"
                             android:textSize="13sp" />
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
@@ -204,8 +206,46 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            app:thumbTint="@color/white"
+                            app:thumbTint="@color/gray"
                             app:trackTint="@color/gray" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/settingsActivity_aboutBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardBackgroundColor="#00000000"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/about_icon" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="About WeatherFlow"
+                            android:textColor="@color/white"
+                            android:textSize="13sp" />
+
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 

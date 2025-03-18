@@ -2,6 +2,9 @@ package com.achelmas.weatherflow.ui.settings
 
 import android.Manifest
 import android.content.Context
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -12,6 +15,7 @@ import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
@@ -45,6 +49,8 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var temperatureUnit: TextView
     private lateinit var temperatureUnitBtn: CardView
 
+    private lateinit var aboutBtn: CardView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -67,6 +73,7 @@ class SettingsActivity : AppCompatActivity() {
 
         temperatureUnitBtn.setOnClickListener { showTemperatureUnitDialog() }
 
+        aboutBtn.setOnClickListener { showAboutDialog() }
     }
 
     private fun initializeViews() {
@@ -77,6 +84,8 @@ class SettingsActivity : AppCompatActivity() {
 
         temperatureUnit = findViewById(R.id.settingsActivity_temperatureUnit)
         temperatureUnitBtn = findViewById(R.id.settingsActivity_temperatureUnitBtn)
+
+        aboutBtn = findViewById(R.id.settingsActivity_aboutBtn)
     }
 
     private fun setUpBackButton() {
@@ -209,6 +218,34 @@ class SettingsActivity : AppCompatActivity() {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0) // Force keyboard open
     }
 
+    private fun showAboutDialog() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_about, null)
+
+        val titleTextView: TextView = dialogView.findViewById(R.id.about_applicationTitle)
+
+        // Create a LinearGradient shader
+        val paint = titleTextView.paint
+        val width = paint.measureText(titleTextView.text.toString())
+        val textShader = LinearGradient(
+            0f, 0f, width, titleTextView.textSize,
+            intArrayOf(
+                ContextCompat.getColor(this , R.color.third_color),  // start
+                ContextCompat.getColor(this , R.color.second_color)   // end
+            ),
+            null,  // No specific positions, let it flow evenly
+            Shader.TileMode.CLAMP
+        )
+        // Apply the gradient to the TextView
+        titleTextView.paint.shader = textShader
+        titleTextView.invalidate()  // Redraw to show the gradient
+
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setView(dialogView)
+            .setPositiveButton("OK") { _, _ -> }
+            .setCancelable(false)
+        val customDialog = dialog.create()
+        customDialog.show()
+    }
 
     override fun onResume() {
         super.onResume()

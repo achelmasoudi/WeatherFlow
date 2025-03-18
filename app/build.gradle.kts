@@ -62,7 +62,4 @@ dependencies {
     // Glide library
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
-    implementation("androidx.work:work-runtime-ktx:2.9.0") // For WorkManager
-    implementation("androidx.core:core-ktx:1.12.0") // For notifications
-
 }
