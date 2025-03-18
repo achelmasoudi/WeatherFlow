@@ -12,21 +12,26 @@
 
 **WeatherFlow**, A modern Android weather application built in Kotlin with Material Design, utilizing a RESTful API (WeatherAPI) for accurate, real-time weather data. Structured with MVVM architecture for maintainability and scalability, it offers real-time current weather, 7-day forecasts with daily and hourly breakdowns, weather updates for popular cities, and a robust city search feature.
 
-
-## Features
+   <br/>
+   
+## 🌟 Features
 - **Real-time Weather**: Get up-to-the-minute weather updates.
 - **7-Day Forecasts**: View daily and hourly weather details for the next week.
 - **Popular Cities**: Check weather for trending cities worldwide.
 - **City Search**: Find weather data for any city with ease.
 
-## Tech Stack
+   <br/>
+  
+## 🛠️ Tech Stack
 - **Language**: Kotlin, Android SDK
 - **API**: RESTful WeatherAPI, Retrofit
 - **Architecture**: MVVM
 - **UI**: Material Design
 - **Storage**: SharedPreferences
 
-## Package Structure
+   <br/>
+   
+## 📂 Package Structure
 ```plaintext
 com.achelmas.weatherflow
 ├── data
