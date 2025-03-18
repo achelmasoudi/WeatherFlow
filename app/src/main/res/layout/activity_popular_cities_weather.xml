@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    tools:context=".ui.popularcities.PopularCitiesWeatherActivity">
+
+    <RelativeLayout
+        android:id="@+id/popularCitiesWeatherActivity_relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/popularCitiesWeatherActivity_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/bg_color"
+            app:popupTheme="@style/Theme.MaterialComponents.Light"
+            app:title="Popular Cities Forecast"
+            app:titleTextAppearance="@style/styleOfToolbar"
+            app:titleTextColor="@color/white" />
+
+        <ProgressBar
+            android:id="@+id/popularCitiesWeatherActivity_progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_below="@id/popularCitiesWeatherActivity_toolbar"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/third_color"
+            android:visibility="visible"
+            style="@android:style/Widget.Material.ProgressBar.Horizontal"/>
+    </RelativeLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:visibility="gone"
+        android:id="@+id/popularCitiesWeatherActivity_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/popularCitiesWeatherActivity_relativeLayout"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp" />
+
+</RelativeLayout>

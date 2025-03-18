@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomSheet_changeCity_containerId"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet_background"
+    android:minHeight="550dp"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/bar_bottom_sheet_icon" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="@font/aldrich"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:text="Change Saved City"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Search TextInputLayout -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginBottom="16dp"
+            android:id="@+id/bottomSheet_searchCity_inputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeWidth="1dp"
+            app:hintEnabled="false"
+            app:endIconMode="custom"
+            app:hintTextColor="@color/gray"
+            app:startIconDrawable="@drawable/searchview_icon">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/bottomSheet_searchCity_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search for a city"
+                android:imeOptions="actionSearch"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/gray" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bottomSheet_citySearch_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:maxHeight="300dp"
+            android:scrollbars="vertical" />
+
+    </LinearLayout>
+
+</RelativeLayout>
