@@ -1,0 +1,1 @@
+A modern Android weather application built in Kotlin with Material Design, utilizing a RESTful API (WeatherAPI) for accurate, real-time weather data. Structured with MVVM architecture for maintainability and scalability, it offers real-time current weather, 7-day forecasts with daily and hourly breakdowns, weather updates for popular cities, and a robust city search feature.
