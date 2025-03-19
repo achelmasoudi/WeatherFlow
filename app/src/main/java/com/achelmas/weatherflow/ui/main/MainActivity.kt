@@ -3,6 +3,8 @@ package com.achelmas.weatherflow.ui.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -31,8 +33,12 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.achelmas.weatherflow.R
 import com.achelmas.weatherflow.data.source.local.CityPreferences
+import com.achelmas.weatherflow.data.source.local.NotificationPreferences
 import com.achelmas.weatherflow.data.source.local.TemperatureUnitPreferences
 import com.achelmas.weatherflow.ui.main.adapter.CitySearchAdapter
 import com.achelmas.weatherflow.ui.main.adapter.HourlyWeatherAdapter
@@ -42,6 +48,7 @@ import com.achelmas.weatherflow.ui.popularcities.adapter.PopularCitiesWeatherAda
 import com.achelmas.weatherflow.ui.settings.SettingsActivity
 import com.achelmas.weatherflow.util.NetworkUtils
 import com.achelmas.weatherflow.viewModel.WeatherViewModel
+import com.achelmas.weatherflow.worker.WeatherNotificationWorker
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -52,6 +59,7 @@ import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -106,10 +114,16 @@ class MainActivity : AppCompatActivity() {
 
         initializeViews()
 
+        // Create notification channel
+        createNotificationChannel()
+
         // Load saved city first
         currentCity = CityPreferences.getSavedCity(this, defaultCity)
 
         currentUnit = TemperatureUnitPreferences.getTemperatureUnit(this)
+
+        // Request notification permission for Android 13+
+        requestNotificationPermission()
 
         // Observe network availability
         setupNetworkMonitoring()
@@ -131,12 +145,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity , Next7DaysActivity::class.java)
             intent.putExtra("currentCity" , currentCity)
             startActivity(intent)
-        }
-
-        // Check if launched from Settings to open SearchView
-        if (intent.getBooleanExtra("open_search_from_settings", false)) {
-            searchView.visibility = View.VISIBLE
-            searchView.show()
         }
 
     }
@@ -162,6 +170,23 @@ class MainActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.mainActivity_progressBar)
     }
 
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = "weather_channel"
+            val channelName = "Weather Updates"
+            val channelDescription = "Daily weather notifications"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+
+            val channel = NotificationChannel(channelId, channelName, importance).apply {
+                description = channelDescription
+            }
+
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
     private fun setupNetworkMonitoring() {
         weatherViewModel.isNetworkAvailable.observe(this) { isConnected ->
             if (!isConnected) {
@@ -184,6 +209,72 @@ class MainActivity : AppCompatActivity() {
             }
         }
         weatherViewModel.checkNetwork(this)
+    }
+
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permission granted, schedule the notification worker if enabled
+            val isNotificationsEnabled = NotificationPreferences.getNotificationPreference(this)
+            if (isNotificationsEnabled) {
+                val workRequest = PeriodicWorkRequestBuilder<WeatherNotificationWorker>(24, TimeUnit.HOURS)
+                    .build()
+                WorkManager.getInstance(this)
+                    .enqueueUniquePeriodicWork(
+                        "weather_notification_work",
+                        androidx.work.ExistingPeriodicWorkPolicy.KEEP,
+                        workRequest
+                    )
+            }
+        } else {
+            // Permission denied, show a message to the user
+            Snackbar.make(
+                findViewById(android.R.id.content),
+                "Notification permission is required to send daily weather updates.", Snackbar.LENGTH_LONG
+            ).setAction("Settings") {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    intent.data = Uri.fromParts("package", packageName, null)
+                    startActivity(intent)
+                }
+                .setBackgroundTint(ContextCompat.getColor(this, R.color.list_item_color))
+                .setTextColor(ContextCompat.getColor(this, R.color.white))
+                .setActionTextColor(ContextCompat.getColor(this, R.color.white))
+                .show()
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            } else {
+                // Permission already granted, schedule the notification worker if enabled
+                val isNotificationsEnabled = NotificationPreferences.getNotificationPreference(this)
+                if (isNotificationsEnabled) {
+                    val workRequest = PeriodicWorkRequestBuilder<WeatherNotificationWorker>(24, TimeUnit.HOURS)
+                        .build()
+                    WorkManager.getInstance(this)
+                        .enqueueUniquePeriodicWork(
+                            "weather_notification_work",
+                            ExistingPeriodicWorkPolicy.KEEP,
+                            workRequest
+                        )
+                }
+            }
+        } else {
+            // For API < 33, no permission needed, schedule the notification worker if enabled
+            val isNotificationsEnabled = NotificationPreferences.getNotificationPreference(this)
+            if (isNotificationsEnabled) {
+                val workRequest = PeriodicWorkRequestBuilder<WeatherNotificationWorker>(24, TimeUnit.HOURS)
+                    .build()
+                WorkManager.getInstance(this)
+                    .enqueueUniquePeriodicWork(
+                        "weather_notification_work",
+                        ExistingPeriodicWorkPolicy.KEEP,
+                        workRequest
+                    )
+            }
+        }
     }
 
     private fun setupPopularCitiesList() {

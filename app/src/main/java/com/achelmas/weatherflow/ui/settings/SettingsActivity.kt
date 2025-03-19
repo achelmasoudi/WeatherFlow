@@ -22,16 +22,23 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.achelmas.weatherflow.R
 import com.achelmas.weatherflow.data.source.local.CityPreferences
+import com.achelmas.weatherflow.data.source.local.NotificationPreferences
 import com.achelmas.weatherflow.data.source.local.TemperatureUnitPreferences
 import com.achelmas.weatherflow.ui.main.adapter.CitySearchAdapter
 import com.achelmas.weatherflow.viewModel.WeatherViewModel
+import com.achelmas.weatherflow.worker.WeatherNotificationWorker
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
+import java.util.concurrent.TimeUnit
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -48,6 +55,9 @@ class SettingsActivity : AppCompatActivity() {
 
     private lateinit var temperatureUnit: TextView
     private lateinit var temperatureUnitBtn: CardView
+
+    private lateinit var notificationsSwitch: SwitchMaterial
+    private lateinit var notificationsBtn: CardView
 
     private lateinit var aboutBtn: CardView
 
@@ -69,6 +79,22 @@ class SettingsActivity : AppCompatActivity() {
         val currentUnit = TemperatureUnitPreferences.getTemperatureUnit(this)
         temperatureUnit.text = if (currentUnit == "C") "Celsius °C" else "Fahrenheit °F"
 
+        // Set up the notification switch
+        val isNotificationsEnabled = NotificationPreferences.getNotificationPreference(this)
+        notificationsSwitch.isChecked = isNotificationsEnabled
+
+        notificationsSwitch.setOnCheckedChangeListener { _, isChecked ->
+            // Save the new state using NotificationPreferences
+            NotificationPreferences.saveNotificationPreference(this, isChecked)
+
+            // Schedule or cancel the notification
+            if (isChecked) {
+                scheduleWeatherNotification()
+            } else {
+                cancelWeatherNotification()
+            }
+        }
+
         changeSavedCityBtn.setOnClickListener { showChangeCityDialog() }
 
         temperatureUnitBtn.setOnClickListener { showTemperatureUnitDialog() }
@@ -84,6 +110,9 @@ class SettingsActivity : AppCompatActivity() {
 
         temperatureUnit = findViewById(R.id.settingsActivity_temperatureUnit)
         temperatureUnitBtn = findViewById(R.id.settingsActivity_temperatureUnitBtn)
+
+        notificationsSwitch = findViewById(R.id.settingsActivity_notificationsSwitch)
+        notificationsBtn = findViewById(R.id.settingsActivity_notificationsBtn)
 
         aboutBtn = findViewById(R.id.settingsActivity_aboutBtn)
     }
@@ -216,6 +245,23 @@ class SettingsActivity : AppCompatActivity() {
         searchEditText.requestFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0) // Force keyboard open
+    }
+
+    private fun scheduleWeatherNotification() {
+        val workRequest = PeriodicWorkRequestBuilder<WeatherNotificationWorker>(24, TimeUnit.HOURS)
+            .build()
+
+        WorkManager.getInstance(this)
+            .enqueueUniquePeriodicWork(
+                "weather_notification_work",
+                ExistingPeriodicWorkPolicy.KEEP,
+                workRequest
+            )
+    }
+
+    private fun cancelWeatherNotification() {
+        WorkManager.getInstance(this)
+            .cancelUniqueWork("weather_notification_work")
     }
 
     private fun showAboutDialog() {
