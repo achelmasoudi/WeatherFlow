@@ -49,5 +49,6 @@ com.achelmas.weatherflow
 │   │   └── adapter    # RecyclerView adapter (PopularCitiesWeatherAdapter)
 │   ├── settings       # SettingsActivity for user preferences
 │   └── splash         # Splash screen UI
-├── util               # Utility classes (e.g., NetworkUtils, WeatherNotificationWorker)
-└── viewModel          # ViewModel classes (WeatherViewModel) for MVVM logic
+├── util               # Utility classes (e.g., NetworkUtils)
+├── viewModel          # ViewModel classes (WeatherViewModel) for MVVM logic
+└── worker             # For sending daily weather notifications
