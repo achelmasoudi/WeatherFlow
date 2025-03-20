@@ -15,19 +15,31 @@
    <br/>
    
 ## 🌟 Features
-- **Real-time Weather**: Get up-to-the-minute weather updates.
-- **7-Day Forecasts**: View daily and hourly weather details for the next week.
-- **Popular Cities**: Check weather for trending cities worldwide.
-- **City Search**: Find weather data for any city with ease.
+- **Real-time Weather:** Get up-to-the-minute weather updates.
+- **7-Day Forecasts:** View daily and hourly weather details for the next week.
+- **Popular Cities:** Check weather for trending cities worldwide.
+- **City Search:** Find weather data for any city with ease.
 
    <br/>
   
 ## 🛠️ Tech Stack
-- **Language**: Kotlin, Android SDK
-- **API**: RESTful WeatherAPI, Retrofit
-- **Architecture**: MVVM
-- **UI**: Material Design
-- **Storage**: SharedPreferences
+- **Language:** Kotlin, Android SDK
+- **API:** RESTful WeatherAPI, Retrofit
+- **Architecture:** MVVM
+- **UI:** Material Design
+- **Storage:** SharedPreferences
+
+
+<br/>
+
+## 📱 Screenshots 
+| <img src="https://github.com/user-attachments/assets/1893fc2b-1123-49b0-aaaf-4f277e92c30e" width="250"/> | <img src="https://github.com/user-attachments/assets/afa7bf0f-bf61-491f-9085-6970d7c92419" width="250"/> | <img src="https://github.com/user-attachments/assets/bb8464b2-bdb0-4519-b15f-8c7cc9a6805d" width="250"/> | <img src="https://github.com/user-attachments/assets/8bab1352-f225-4f3a-a303-f1c2a4e9b077" width="250"/> | 
+| :-------------:  | :-------------:  | :-------------:  | :-------------:  |
+|     **Splash Screen**     |     **Primary Dashboard**     |     **Next 7 Days**     |     **Popular Cities Forecast**     |
+
+| <img src="https://github.com/user-attachments/assets/00be94ba-eb52-4324-b2dc-b7a68c2fcc76" width="250"/> | <img src="https://github.com/user-attachments/assets/0a4118ce-3683-43c8-b417-9042a7177131" width="250"/> | <img src="https://github.com/user-attachments/assets/602c518d-3228-4855-add8-5d8f2bc49b05" width="250"/> | <img src="https://github.com/user-attachments/assets/99b76d47-673c-48c8-a4b5-f56eab8296dd" width="250"/> |
+| :-------------:  | :-------------:  | :-------------:  | :-------------:  |
+|     **Search Activity**     |     **Settings Activity**     |     **About App**     |     **Notification**     |
 
    <br/>
    
