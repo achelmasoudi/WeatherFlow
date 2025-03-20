@@ -1,6 +1,6 @@
 <div align="center">
       <h1> 
-            <img src="https://github.com/user-attachments/assets/452d9922-1f0d-4946-a403-a9b33074c068" width="165px">
+            <img src="https://github.com/user-attachments/assets/452d9922-1f0d-4946-a403-a9b33074c068" width="180px">
             <br/>
             WeatherFlow
             <br/> 
